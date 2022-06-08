@@ -1,0 +1,340 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div id="qwe" class="setting">
+    <nav id="checker" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="name" class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+
+            </ul>
+
+            <button id="name-field" class="btn btn-info my-2 my-sm-0" type="submit"
+                onclick="javascript:location.href='/profile'">profile</button>
+            <button class="btn btn-dark my-2 my-sm-0" type="submit" onclick="logout()">Logout</button>
+
+        </div>
+    </nav>
+
+
+
+<div class="timer" id="timer">
+   <canvas id="clock" width="200" height="200" class="clock">clock</canvas>
+</div>
+<script>
+
+var dom = document.getElementById("clock");
+if (dom.getContext) {
+	var ctx = dom.getContext("2d");
+	var w = ctx.canvas.width;
+	var h = ctx.canvas.height;
+	var r = w / 2;
+	timerFn();
+	setInterval(timerFn, 500);
+
+}
+
+
+function drawBackground() {
+
+	ctx.save();
+	
+	ctx.translate(r, r);
+	
+	ctx.beginPath();
+
+	ctx.arc(0, 0, r - 5, 0, 2 * Math.PI, false);
+
+	ctx.lineWidth = 10;
+	ctx.stroke();
+
+	var hourNum = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2];
+
+	ctx.font = "15px Arial";
+
+	ctx.textBaseline = "middle";
+	ctx.textAlign = "center";
+
+	hourNum.forEach(function(n, i) {
+	
+		var rad = 2 * Math.PI / 12 * i;
+		
+		var x = Math.cos(rad) * (r - 25);
+		var y = Math.sin(rad) * (r - 25);
+	
+		ctx.fillText(n, x, y);
+	});
+
+	for (var i = 0; i < 60; i++) {
+		var rad = 2 * Math.PI / 60 * i;
+		var x = Math.cos(rad) * (r - 15);
+		var y = Math.sin(rad) * (r - 15);
+	
+		ctx.beginPath();
+		
+		if (i % 5 === 0) {
+			ctx.fillStyle = "#000"
+			ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
+		} else {
+			ctx.fillStyle = "#ccc"
+			ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
+		}
+		ctx.fill();
+	}
+}
+
+
+function drawHour(h, m) {
+
+	ctx.save();
+
+	ctx.beginPath();
+
+	var rad = (2 * Math.PI / 12) * h;
+	
+	var mrad = (2 * Math.PI / 12) / 60 * m
+	ctx.rotate(rad + mrad);
+	ctx.lineWidth = 3;
+	
+	ctx.lineCap = "round";
+
+	ctx.moveTo(0, 10);
+
+	ctx.lineTo(0, -r / 2);
+
+	ctx.stroke();
+
+	ctx.restore();
+}
+
+
+function drawMin(m) {
+
+	ctx.save();
+
+	ctx.beginPath();
+
+	var rad = (2 * Math.PI / 60) * m;
+	ctx.rotate(rad);
+
+	ctx.lineWidth = 2;
+	ctx.lineCap = "round";
+
+	ctx.moveTo(0, 10);
+
+	ctx.lineTo(0, -(r / 2 + 10));
+	
+	ctx.stroke();
+
+	ctx.restore();
+}
+
+
+function drawSec(s) {
+	
+	ctx.save();
+
+	ctx.beginPath();
+	
+	var rad = (2 * Math.PI / 60) * s;
+	ctx.rotate(rad);
+	ctx.fillStyle = "#D40000";
+	ctx.moveTo(-2, 20);
+	ctx.lineTo(2, 20);
+	ctx.lineTo(1, -r + 18);
+	ctx.lineTo(-1, -r + 18);
+	
+	ctx.fill();
+
+	ctx.restore();
+}
+
+
+function drawCircle() {
+	ctx.beginPath();
+	ctx.arc(0, 0, 3, 0, 2 * Math.PI, false);
+	ctx.fillStyle = "#fff";
+	ctx.fill();
+}
+
+function timerFn() {
+	
+	ctx.clearRect(0, 0, w, h);
+	var oDate = new Date();
+	var oHour = oDate.getHours();
+	var oMin = oDate.getMinutes();
+	var oSec = oDate.getSeconds();
+	drawBackground();
+	drawCircle()
+	drawHour(oHour, oMin);
+	drawMin(oMin);
+	drawSec(oSec);
+
+	ctx.restore()
+}
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h1>Chart room list:</h1>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {{#if isAvailable}}
+    <div id="back" class="card" style="width: 120rem;">
+        <ul id="list-template1" class="list-group-item">
+            {{#each rooms}}
+            <li class="list-group-item"> <a href={{this.id}}> {{this.name}}  </a></li>
+           
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="forma">
+
+    <form action="/create" method="POST">
+        <input type="text" name="roomName" placeholder="enter room name" />
+        <input type="submit" value="create room" />
+    </form>
+</div>
+
+</div>
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+<script>
+    window.addEventListener('load', async function () {
+        await fetch('/api/currentUser')
+            .then(response => response.json())
+            .then(data => {
+                if (data.currentUserName == "") {
+                    location.href = "/login"
+                }
+                document.getElementById("name-field").innerHTML = data.currentUserName
+            })
+        setInterval(async function () {
+            fetch('http://localhost:3000/getRoom')
+                .then(response => response.json())
+                .then(data => {
+                    var roomsJson = data;
+                    console.log(roomsJson);
+                    var html = "";
+                    var ul_element = document.getElementById('list-template');
+
+                    document.getElementById('list-template').innerHTML = " "
+
+                    for (var j = 0; j < roomsJson.length; ++j) {
+                        var li = document.createElement('li');
+                        var a = document.createElement('a');
+                        a.setAttribute('href', roomsJson[j].id)
+                        li.appendChild(a);
+                        li.className = "list-group-item";
+                        document.getElementById('list-template').appendChild(li)
+                        a.innerHTML = a.innerHTML + roomsJson[j].name
+                    }
+
+                })
+                .catch(err => {
+                    console.log("ERROR" + err)
+                });
+        }, 1000);
+    });
+
+
+    function logout() {
+        fetch('/api/logout')
+            .then(location.href = "/login")
+
+            .catch(err => {
+                console.log("ERROR" + err)
+            });
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script>
+
+    var options = {
+        bottom: '770px', // default: '32px'
+        right: 'unset', // default: '32px'
+        left: '1855px', // default: 'unset'
+
+        time: '0.5s', // default: '0.3s'
+        mixColor: '#fff', // default: '#fff'
+        backgroundColor: '#fff',  // default: '#fff'
+        buttonColorDark: '#100f2c',  // default: '#100f2c'
+        buttonColorLight: '#fff', // default: '#fff'
+        saveInCookies: false, // default: true,
+        label: '🌓' // default: ''
+        
+    }
+
+    const darkmode = new Darkmode(options);
+    darkmode.showWidget();
+</script>

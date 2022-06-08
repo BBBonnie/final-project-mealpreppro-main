@@ -1,0 +1,292 @@
+.darkmode--activated a ,.darkmode--activated li ,.darkmode--activated href{
+    color: red;
+    background-color: black;
+    border-color: aqua;
+  }
+
+  .darkmode--activated ul ,.darkmode--activated a{
+
+    background-color: black;
+    border-color: aqua;
+  }
+
+  
+  .darkmode--activated .navbar-brand {
+   
+    background-color: rgb(241, 24, 24);
+    color: rgb(247, 247, 247);
+
+
+  }
+
+
+  .setting{
+     /* background-color: rgb(85, 158, 241);  */
+     background-image: url("123.jpg");
+  
+}
+.darkmode--activated #qwe
+{
+    background-color: rgb(255, 255, 255);
+    
+   
+}
+
+.darkmode--activated .collapse 
+{
+    background-color: rgb(5, 0, 0);
+    
+   
+}
+
+
+ul
+{
+  left:35%;
+  width:600px;
+}
+
+#back
+{
+    /* background-image:url('123.jpg'); */
+  background-color: rgb(11, 242, 250);
+  border-color: aqua;
+}
+.darkmode--activated #back
+{
+  background-color: rgb(7, 7, 7);
+
+}
+
+
+.timer{
+  text-align: center;
+}
+.clock{
+   width: 150px;
+} 
+
+#login
+{
+   width:200px;
+  left:300px;
+  background-color: aqua;
+}
+
+
+#main
+{
+  background-color: rgb(3, 3, 3);
+}
+#ma
+{
+  background-color: rgb(2, 2, 2);
+}
+
+/* #raw
+{
+  height: 4000px;
+  width:4000px;
+  border-width: thin;
+  border-color: brown;
+} */
+
+h1{
+  font:italic 1em Georgia, serif;
+
+  
+}
+.text{
+  font:italic 1em Georgia, serif;
+
+  
+}
+
+
+
+.name{   
+  font-size:50px;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FF512F;
+  font-weight: 700;
+  text-shadow: 0px 0px 7px #ffd800;
+  background-image: linear-gradient(90deg, #ffd800 0%, #ff512f 100%, #fff);
+  animation: glow-animation 2s infinite linear;
+  color: #FFC0CB;
+  box-sizing: border-box;
+  vertical-align: inherit;
+}
+@keyframes glow-animation{
+  0%{filter:hue-rotate(-360deg)}
+  100%{filter:hue-rotate(360deg)}
+}.jb{
+font-size: 16px;
+background-image: -webkit-linear-gradient(90deg, #4e17df, #fb6bea 25%, #4e17df 50%, #fb6bea 75%, #4e17df);
+-webkit-text-fill-color: transparent;
+-webkit-background-clip: text;
+background-size: 100% 600%;
+animation: jb 10s linear infinite;
+}
+
+@keyframes jb {
+0% {
+  background-position: 0 0;
+}
+
+100% {
+  background-position: 0 -300%;
+}
+}
+
+#forma
+{
+  text-align: center;
+}
+
+#reg-form
+{
+
+}
+
+.set
+{          
+  /* border-style: solid;
+           border-width: 5px; */
+  
+  position:absolute; 
+  left:1800px; 
+  top:5%;
+
+}
+#list-template
+{          
+  border-style: solid; 
+  border-width: 1px;
+  border-color: gray;
+
+width: 1834px;
+
+}
+.messageText
+{
+  color:#3f04e0;
+ 
+}
+.set3
+{
+  /* border-style: solid;
+  border-width: 5px;
+  border-color: #e21818; */
+
+}
+
+#searchBar
+{
+ 
+  /* border-style: solid;
+  border-width: 5px;
+  border-color: #e21818;
+  position: relative; */
+  width: 650px;
+
+}
+
+.pic
+{
+
+  left:50%;
+  position: relative;
+}
+#message-field
+{
+  width: 650px;
+ 
+ 
+}
+
+#set4
+{  
+  
+  /* border-style: solid;
+  border-width: 5px;
+  border-color: #e21818; */
+
+  background-color: gray;
+ 
+
+}
+
+
+
+
+
+
+/* CSS */
+.button-85 {
+  padding: 0.6em 2em;
+  border: none;
+  outline: none;
+  color: rgb(255, 255, 255);
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-85:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing-button-85 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+@keyframes glowing-button-85 {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.button-85:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #222;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}

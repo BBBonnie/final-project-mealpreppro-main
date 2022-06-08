@@ -1,0 +1,85 @@
+
+<h1 class="name">Registration</h1>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<p class="text">This is a demo of profile page</p>
+{{!-- <p class="text"id="profile">Profile </p>
+<p class="text"id="user-name">
+    The profile you are visiting is
+</p>
+<p class="text" id="user-id">
+    The user ID is
+</p> --}}
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+
+                
+                <span> </span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+               
+                
+                    
+                </div>
+                       <h1>Enter password and username</h1>
+                <div class="row mt-3">
+             
+                        <form id="reg-form">
+                            
+                        <div class="col-md-3"><input type="text" id="username" placeholder="username" /></div>
+                        <div class="col-md-3"><input type="password" id="password" placeholder="password" /></div>
+                        
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit"value="Submit Form" >Submit</button>
+                        </div>
+                        
+                        </form>
+                    
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+<script>
+    const form = document.getElementById("reg-form")
+    form.addEventListener("submit", registerUser)
+
+    async function registerUser(event) {
+
+        const username = document.getElementById("username").value
+        const password = document.getElementById("password").value
+
+        const result = await fetch ("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body : JSON.stringify({
+                username, password
+            })
+        }).then((res) =>res.json())
+
+        if(result.status === "ok"){
+            //alert("success")
+            location.href = '/';
+        }else{
+            alert(result.error)
+            location.reload()
+        }
+
+    }
+
+</script>
+

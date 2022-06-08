@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<h1> Change Password </h1>
+
+<p>This is a demo of Change Password page</p>
+<p id="profile">Change Password </p>
+<p id="user-name">
+    The profile you are visiting is
+</p>
+<p id="user-id">
+    The user ID is
+</p>
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+
+                <span class="font-weight-bold">Bonnie</span>
+                <span class="text-black-50">bonnie@gmail.com</span>
+                <span> </span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Change Password</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="password_current">Your current password:</label>
+                        <input id="currentPass" type="text" class="form-control" placeholder="current password" value="">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="password_new">Your new password:</label>
+                        <input id="newPass" type="text" class="form-control" value="" placeholder="new password">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="password_confirm">Confirm your password:</label>
+                        <input id="confirmPass" type="text" class="form-control" value="" placeholder="confirm password">
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <button class="btn btn-primary profile-button" type="button" onclick="changePass()">Save Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    async function changePass() {
+        const currentPass = document.getElementById("currentPass").value
+        const newPass = document.getElementById("newPass").value
+        const confirmPass = document.getElementById("confirmPass").value
+        const username = "need do this "//document.getElementById('username').value
+        
+        if (newPass != confirmPass){
+            alert("New password doesn't match, please try again.")
+            
+            return;
+        }
+        const response = await fetch('/api/change-password', {
+            method: 'post',
+
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username:username,
+                currentPass:currentPass,
+                newPass:newPass, 
+            })
+        }).then((res) => res.json())
+
+        if (result.status === 'ok') {
+            // everythign went fine
+            console.log('Got the token: ', result.data)
+            localStorage.setItem('token', result.data)
+            alert('Success')
+        } else {
+            alert(result.error)
+        }
+    }
+</script>

@@ -1,0 +1,330 @@
+
+<h1> </h1>
+<div id="set4">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="name"class="navbar-brand" href="/">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      
+      
+    </ul>
+    
+      <button id = "name-field" class="btn btn-info my-2 my-sm-0" type="submit" onclick="javascript:location.href='/profile'">profile</button>
+      <button class="btn btn-dark my-2 my-sm-0" type="submit" onclick="logout()">Logout</button>
+
+  </div>
+</nav>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<h1> Room </h1>
+
+<p class="text">This is a demo of chatroom page</p>
+<p class="text" id = "welcome">Welcome </p>
+<p class="text"id="room-name">
+  The room you are visiting is
+</p>
+<p class="text"id="room-id">
+  The room ID is 
+</p>
+
+<input id="searchBar" type="search" placeholder="Search in messages" />
+<span id="pic"style='font-size:35px;'>&#128187;</span>
+<div class="card" style="width: 18rem;">
+  <ul id="list-template" class="list-group list-group-flush">
+    <li class="list-group-item">Loading messages...</li>
+
+  </ul>
+</div>
+<div>
+  <input id = "message-field" type="text" name="message" placeholder="enter message" />
+ <button class="button-85" onclick="createMessageDB()" >Send message</button>
+</div>
+
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+<script>
+  
+  let person="";
+  let messageSize = 0;
+  let myRoomObjId = "";
+  let singleTimeToggle = true;
+  window.addEventListener('load', function () {
+  let text;
+  let currentUser = ""
+  
+   
+  //person = prompt("Please enter your name:", "");
+  person = "Guest"
+  fetch('/api/profile')
+  .then(response => response.json())
+  .then(data => 
+  {
+    person = data.displayName
+    if (person == null || person == "") {
+      text = "User cancelled the prompt.";
+    } else {
+      text = "Hello " + person + ". Welcome to the chat room!!";
+    }
+    document.getElementById("welcome").innerHTML = text;
+  
+  })
+  
+  
+
+
+  setInterval(async function(){
+   fetch('/api/currentUser')
+  .then(response => response.json())
+  .then(data => currentUser = data)
+  document.getElementById("name-field").innerHTML = currentUser.currentUserName;
+   let myRoomId = "{{roomId}}"
+   let rooms = {{{json rooms}}}
+   let myRoomName = "";
+   
+   for (let i =0 ;i< rooms.length;i++){
+       if (rooms[i].id === myRoomId){
+           myRoomObjId = rooms[i]._id
+           myRoomName = rooms[i].name
+       }
+   }
+   
+   
+   //document.getElementById("link_1").innerHTML = rooms[0].id;
+    //"628a952ecb872044a181f00d"
+
+   fetch('http://localhost:3000/roomMessage?' + new URLSearchParams({ 
+      roomID:myRoomObjId, 
+   
+   }))
+   .then(response => response.json())
+                
+   .then(data => {
+    var roomsJson = data;
+    var searchString = document.getElementById("searchBar").value
+    if (messageSize == roomsJson.length && searchString ==="") return;
+    messageSize = roomsJson.length;
+    console.log(roomsJson);
+    var html = "";
+    var ul_element = document.getElementById('list-template');
+    
+    document.getElementById('list-template').innerHTML=" "
+    
+    console.log(searchString);
+    
+    for(var j = 0; j < roomsJson.length; ++j) {
+      const myMessageId = roomsJson[j]._id
+      const myMessageText = roomsJson[j].message
+      const myMessageVote = roomsJson[j].votes
+        {{!-- var qw = document.createElement('ul');
+        qw.className="set3"; --}}
+
+      var li = document.createElement('li');
+      {{!-- qw.appendChild(li); --}}
+         {{!-- li.className="set2";  --}}
+      li.setAttribute("id", myMessageId);
+    
+      const para = document.createElement("p");
+      var name = document.createElement('b');
+      name.innerHTML = roomsJson[j].userName+"@" + roomsJson[j].datetime + ":";
+      para.innerHTML = myMessageText;
+      para.className = "messageText"
+      if(para.innerHTML.includes(searchString)){
+        li.appendChild(name);
+        li.appendChild(para);
+      }else{
+        
+          continue;
+      }
+        var voteWrapper = document.createElement('div');
+        voteWrapper.className="set";
+        var upVoteIcon = document.createElement('button');
+     
+        upVoteIcon.style.fontSize ="24px";
+        upVoteIcon.className = "fa fa-sort-up";
+        upVoteIcon.id = "set";
+        
+        upVoteIcon.onclick = async function () {
+          var testContainer = document.getElementById(myMessageId);
+          
+          var v = testContainer.querySelector('.voteCount');
+          v.innerHTML++
+          let body = {
+            messageID:myMessageId,
+            messageVote: v.innerHTML,
+          };
+          const response = await fetch('/message', {
+          method: 'PATCH', //somehow case sensitive 
+          body: JSON.stringify(body),
+          headers: {'Content-Type': 'application/json'}
+          });   
+        };
+        voteWrapper.appendChild(upVoteIcon);
+        var voteCount = document.createElement("p");
+        voteCount.innerHTML = roomsJson[j].votes;
+        voteCount.className = "voteCount"
+        voteWrapper.appendChild(voteCount);
+
+        var downVoteIcon = document.createElement('button');
+        downVoteIcon.style.fontSize ="24px";
+        downVoteIcon.className = "fa fa-sort-down";
+        downVoteIcon.onclick = function () {
+          var testContainer = document.getElementById(myMessageId);
+          
+          var v = testContainer.querySelector('.voteCount');
+          v.innerHTML--
+          let body = {
+            messageID:myMessageId,
+            messageVote: v.innerHTML,
+          };
+          const response = fetch('/message', {
+          method: 'PATCH', //somehow case sensitive 
+          body: JSON.stringify(body),
+          headers: {'Content-Type': 'application/json'}
+          });   
+        };
+        voteWrapper.appendChild(downVoteIcon);
+        li.appendChild(voteWrapper);
+
+        var editIcon = document.createElement('i');
+        editIcon.style.fontSize ="24px";
+        editIcon.className = "fa fa-pencil-square-o";
+        editIcon.onclick = function () {
+            // delete on DOM and send update to server 
+            var element = document.getElementById(myMessageId);
+            var textField = element.querySelector('.messageText');
+            
+            //temp hide message
+            console.log(textField.style.visibility)
+            if(textField.style.visibility != "hidden"){
+              var editWrapper = document.createElement('div');
+              textField.style.visibility = "hidden";
+              var editBox = document.createElement('INPUT');
+              editBox.setAttribute("type", "text");
+              editBox.value = textField.innerHTML;
+              editWrapper.appendChild(editBox)
+              
+              var submitEditButton= document.createElement('button');
+              submitEditButton.innerHTML = "Submit";
+              submitEditButton.onclick = function () {
+                 textField.innerHTML = editBox.value;
+                 editWrapper.remove()
+                 textField.style.visibility ='visible';
+                  let body = {
+                  messageID:myMessageId,
+                  messageText: textField.innerHTML
+                  };
+                  const response =  fetch('/message', {
+                  method: 'PATCH', //somehow case sensitive 
+                  body: JSON.stringify(body),
+                  headers: {'Content-Type': 'application/json'}
+                  }); 
+              }
+
+
+              editWrapper.appendChild(submitEditButton)
+              element.insertBefore(editWrapper, element.children[1]);
+
+            }
+
+            
+
+        };
+
+        li.appendChild(editIcon);
+        var deleteIcon = document.createElement('a');
+        deleteIcon.style.color = "red";
+        deleteIcon.style.fontSize ="24px";
+        deleteIcon.className = "fa fa-trash-o";
+        deleteIcon.onclick = function () {
+            // delete on DOM and send update to server 
+            const element = document.getElementById(myMessageId);
+            element.remove();
+            
+            let body = {
+            messageID:myMessageId,
+            };
+            const response = fetch('/message', {
+            method: 'DELETE', //somehow case sensitive 
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+          });
+
+        };
+        li.appendChild(deleteIcon);
+        
+        li.className = "list-group-item";
+      
+        document.getElementById('list-template').appendChild(li)
+        
+    }
+
+                })
+                .catch(err => {
+                    console.log("ERROR" + err)
+                });
+  if (singleTimeToggle){
+    document.getElementById('room-name').innerHTML+=myRoomName;
+    document.getElementById('room-id').innerHTML+=myRoomId;
+    singleTimeToggle = false;
+  }
+   
+
+   }, 1000);
+
+  });
+  function handleVote(){
+    console.log("handles votesss");
+  }
+  async function createMessageDB(){
+    let userName = person;
+    let message =document.getElementById("message-field").value
+    document.getElementById("message-field").value='';
+    let body = {
+      userName:userName,
+      message: message ,
+      id:myRoomObjId,
+    };
+    const response = await fetch('/createMessage', {
+    method: 'post',
+    body: JSON.stringify(body),
+    headers: {'Content-Type': 'application/json'}
+    });
+  
+  }  
+  
+  function logout(){
+    fetch('/api/logout')
+    .then(location.href = "/login")
+    
+    .catch(err => {
+        console.log("ERROR" + err)
+    });
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script>
+
+    var options = {
+        bottom: '770px', // default: '32px'
+        right: 'unset', // default: '32px'
+        left: '1855px', // default: 'unset'
+
+        time: '0.5s', // default: '0.3s'
+        mixColor: '#fff', // default: '#fff'
+        backgroundColor: '#fff',  // default: '#fff'
+        buttonColorDark: '#100f2c',  // default: '#100f2c'
+        buttonColorLight: '#fff', // default: '#fff'
+        saveInCookies: false, // default: true,
+        label: '🌓' // default: ''
+        
+    }
+
+    const darkmode = new Darkmode(options);
+    darkmode.showWidget();
+</script>
+
+</div>
